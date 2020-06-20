@@ -20,7 +20,11 @@ public class MainDao {
 
      //   User read = userDao.read(3);
 
-     //   User update = userDao.update();
+        User damian2 = userDao.read(2);
+        damian2.setUserName("Dami");
+        damian2.setEmail("equador@gmail.com");
+        damian2.setPassword(userDao.hashPassword("abdeee"));
+        userDao.update(damian2);
     }
 
 }

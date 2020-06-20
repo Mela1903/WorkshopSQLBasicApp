@@ -9,7 +9,8 @@ public class UserDao {
 
     private static final String CREATE_USER_QUERY = "INSERT INTO users (username, email, password) VALUES (?, ?, ?);";
     private static final String READ_USER_QUERY = "SELECT * FROM users where id = ?";
-    private static final String UPDATE_USER_QUERY = "UPDATE users SET username = ?, email = ?, password = ? where id = ?";
+    private static final String UPDATE_USER_QUERY = "UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?";
+    private static final String DELETE_USER_QUERY = "DELETE FROM users WHERE id = ?";
 
     public User create(User user) {
         try (Connection conn = DBUtil.getConnection()) {
@@ -44,11 +45,13 @@ public class UserDao {
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                int id = rs.getInt("id");
-                String username = rs.getString("username");
-                String email = rs.getString("email");
-                String password = rs.getString("password");
-                System.out.println("id: " + id + "\n" + "username: " + username + "\n" + "email: " + email + "\n" + "password: " + password);
+                User user2 = new User();
+                user2.setId(rs.getInt("id"));
+                user2.setUserName(rs.getString("username"));
+                user2.setEmail(rs.getString("email"));
+                user2.setPassword(rs.getString("password"));
+//                System.out.println("id: " + id + "\n" + "username: " + username + "\n" + "email: " + email + "\n" + "password: " + password);
+                return user2;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -62,8 +65,18 @@ public class UserDao {
 
             statement.setString(1, user.getUserName());
             statement.setString(2, user.getEmail());
-            statement.setString(3, hashPassword(user.getPassword()));
+            statement.setString(3, user.getPassword());
             statement.setInt(4,user.getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void delete(int userId) {
+        try (Connection conn = DBUtil.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(DELETE_USER_QUERY);
+            statement.setInt(1, userId);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
