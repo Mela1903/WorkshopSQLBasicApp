@@ -1,5 +1,8 @@
 package pl.coderslab.entity;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 public class User {
 
     private int id;
@@ -39,7 +42,7 @@ public class User {
         this.password = password;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 	// write your code here
 
     }
